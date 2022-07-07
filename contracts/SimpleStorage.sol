@@ -18,6 +18,12 @@ contract SimpleStorage{
     uint256 favoriteNumber;
     People person = People({favoriteNumber: 2, name:"Yoon"});
 
+    /*
+    Solidity에는 mapping이라 불리는 datastructure가 있다.
+    mapping은 dictionary라고 생각하면 이해하기 쉽다.
+    */
+    mapping(string => uint256) public nameToFavoriteNumber;
+
     //uint256 public favoriteNumbersList;
     // solidity에서 array는 아래와 같이 선언했을 때 dynamic array이다. 
     People[] people;
@@ -75,5 +81,6 @@ contract SimpleStorage{
         // People memory newPerson = People(_favoriteNumber, _name);
         People memory newPerson = People({favoriteNumber: _favoriteNumber, name: _name});
         people.push(newPerson);
+        nameToFavoriteNumber[_name] = _favoriteNumber;
     }
 }
