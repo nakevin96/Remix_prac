@@ -14,10 +14,20 @@ contract SimpleStorage{
     */
 
     //This gets initialized to zero
+    // 변수의 기본 visibility는 internal이다.
     uint256 favoriteNumber;
 
     function store(uint256 _favoriteNumber) public{
         favoriteNumber = _favoriteNumber;
+    }
+
+    // ☆☆☆☆'gas'는 오직 blockchain의 state를 변경하는 transaction에 한해서만 소모된다.☆☆☆☆
+    // view라는 것은 contract에 있는 function 밖이 정보를 읽기만 하는 작업이라 gas가 소모되지 않는다.
+    // 이 view가 선언된 부분에서는 function밖의 정보를 수정할 수 없다.
+    // 만약 pure라고 선언된다면, 이 함수 내에서는 함수 외부 값을 읽을수도, 변경할 수도 없다.
+    // 아래의 경우 favoriteNumber에 아예 접근도 불가능 하다는 의미이다.
+    function retrieve() public view returns(uint256){
+        return favoriteNumber;
     }
 }
 
