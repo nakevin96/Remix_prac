@@ -2,7 +2,7 @@
 pragma solidity ^0.8.8;
 
 //solidity의 contract keyword는 java, javascript의 class와 유사하다.
-contract SimpleStorage{
+contract SimpleStorageBasic{
     /*solidity의 기본적인 자료형은 boolean, uint, int, address, bytes등이 있다.*/
     /*
     bool hasFavoriteNumber = true;
