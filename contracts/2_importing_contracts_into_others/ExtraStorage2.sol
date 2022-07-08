@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import "./SimpleStorage.sol";
+import "./ExtraStorage.sol";
 
-contract ExtraStorage is SimpleStorage{
+contract ExtraStorage2 is ExtraStorage{
     /*
     만약 contract를 상속받아 사용하고 싶다면
     우리는 두 가지 키워드에 대해 알아야 한다.
@@ -14,6 +14,6 @@ contract ExtraStorage is SimpleStorage{
     그리고 기존에 존재하는 함수는 override를 하기위해서 virtual 키워드를 가져야 한다.
     */
     function store(uint256 _favoriteNumber) public virtual override {
-        favoriteNumber = _favoriteNumber + 5;
+        favoriteNumber = _favoriteNumber + 10;
     }
 }
