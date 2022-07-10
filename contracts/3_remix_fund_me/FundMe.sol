@@ -9,6 +9,7 @@ USD기준으로 최소 funding value를 지정할 것이다.
 */
 import './PriceConverter.sol';
 
+error NotOwner();
 contract FundMe {
     using PriceConverter for uint256;
     //상수를 constant로 선언하면 소모되는 gas를 줄일 수 있다.
@@ -89,9 +90,17 @@ contract FundMe {
     전, 후는 _;로 확인하면 된다.
     */
     modifier onlyOwner {
-        require(msg.sender == i_owner, "Sender is not owner!");
+        //require(msg.sender == i_owner, "Sender is not owner!");
+        if(msg.sender != i_owner) {revert NotOwner();}
         _;
 
     }
-    
+    /*
+    fund 함수를 통하지 않고 ETH를 contract에 누군가가 보냈을 때는 어떻게 처리해야 할까?
+    이런 상황에서 사용하기 좋은 함수가 있다.
+
+    바로 receive()와 fallback()이다.
+    contract는 최대 1개의 receive function을 receive() external payable {...}과 같은 형태로
+    선언할 수 있다. 
+    */
 }
