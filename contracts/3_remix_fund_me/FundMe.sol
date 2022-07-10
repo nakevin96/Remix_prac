@@ -11,17 +11,19 @@ import './PriceConverter.sol';
 
 contract FundMe {
     using PriceConverter for uint256;
-    uint256 public minimumUsd = 50 * 10 ** 18;
+    //상수를 constant로 선언하면 소모되는 gas를 줄일 수 있다.
+    uint256 public constant MINIMUM_USD = 50 * 10 ** 18;
 
     // fund를 제공해준 사용자를 저장할 변수를 선언
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunded;
 
-    address public owner;
+    //immutable한 변수에 immutable keyword를 사용하면 gas를 줄일 수 있다.
+    address public immutable i_owner;
     // constructor는 contract를 deploy했을 때 실행되는 함수이다.
     constructor(){
         // msg.sender는 deploy를 한 사람이 될 것이다.
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
     /*
     이더리움 플랫폼 위에서 이더 코인을 전송하는 스마트 컨트랙트를 작성하기 위해서는 반드시 payable키워드가 있어야 한다.
@@ -47,7 +49,7 @@ contract FundMe {
         // require는 체크 함수로 앞에서 조건을 체크하고 만약 만족하지 않는다면 두번째 인자를 바탕으로 에러를 반환한다.
         //require(msg.value >= 1e18, "Didn't send enough!");
         //require(msg.value >= minimumUsd, "Didn't send enough!");
-        require(msg.value.getConversionRate() >= minimumUsd, "Didn't send enough!");
+        require(msg.value.getConversionRate() >= MINIMUM_USD, "Didn't send enough!");
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] = msg.value;
     }
@@ -87,7 +89,7 @@ contract FundMe {
     전, 후는 _;로 확인하면 된다.
     */
     modifier onlyOwner {
-        require(msg.sender == owner, "Sender is not owner!");
+        require(msg.sender == i_owner, "Sender is not owner!");
         _;
 
     }
