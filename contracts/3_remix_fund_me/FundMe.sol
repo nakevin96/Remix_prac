@@ -16,6 +16,13 @@ contract FundMe {
     // fund를 제공해준 사용자를 저장할 변수를 선언
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunded;
+
+    address public owner;
+    // constructor는 contract를 deploy했을 때 실행되는 함수이다.
+    constructor(){
+        // msg.sender는 deploy를 한 사람이 될 것이다.
+        owner = msg.sender;
+    }
     /*
     이더리움 플랫폼 위에서 이더 코인을 전송하는 스마트 컨트랙트를 작성하기 위해서는 반드시 payable키워드가 있어야 한다.
     즉 payable키워드가 들어간 function만이 이더를 주고 받을 수 있다는 의미이다.
@@ -45,7 +52,7 @@ contract FundMe {
         addressToAmountFunded[msg.sender] = msg.value;
     }
 
-    function withdraw() public {
+    function withdraw() public onlyOwner {
         for(uint256 funderIndex=0; funderIndex < funders.length; funderIndex=funderIndex+1){
             address funder = funders[funderIndex];
             addressToAmountFunded[funder] = 0;
@@ -68,6 +75,21 @@ contract FundMe {
         (bool callSuccess, )=payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, "Call failed");
         */
+        (bool callSuccess, )=payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call failed");
+    }
+
+    /*
+    modifer는 어떤 함수를 실행하기 전이나 후, 수행해야 하는 과정이 있을 때 사용할 수 있다.
+    아래와 같이 onlyOwner를 만들고 withdraw를
+    funciton withdraw() public onlyOwner{..}와 같이 선언하면
+    require로 owner인지 아닌지 체크한 후 withdraw를 수행하는 것이다.
+    전, 후는 _;로 확인하면 된다.
+    */
+    modifier onlyOwner {
+        require(msg.sender == owner, "Sender is not owner!");
+        _;
+
     }
     
 }
