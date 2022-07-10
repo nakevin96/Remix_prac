@@ -7,11 +7,10 @@ contract사용자들로 부터 fund를 받고
 fund를 취소할 수 있는 기능을 만들고
 USD기준으로 최소 funding value를 지정할 것이다.
 */
-
-// ABI 정보
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import './PriceConverter.sol';
 
 contract FundMe {
+    using PriceConverter for uint256;
     uint256 public minimumUsd = 50 * 1e18;
 
     // fund를 제공해준 사용자를 저장할 변수를 선언
@@ -40,30 +39,11 @@ contract FundMe {
         // 1eth이상을 제한으로 걸 수 있다.
         // require는 체크 함수로 앞에서 조건을 체크하고 만약 만족하지 않는다면 두번째 인자를 바탕으로 에러를 반환한다.
         //require(msg.value >= 1e18, "Didn't send enough!");
-        require(msg.value >= minimumUsd, "Didn't send enough!");
+        //require(msg.value >= minimumUsd, "Didn't send enough!");
+        require(msg.value.getConversionRate() >= minimumUsd, "Didn't send enough!");
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] = msg.value;
     }
 
-    /*
-    getPrice function은 ethereum의 가격을 USD가격으로 받아오기 위한 함수이다.
-    Block chain에서 이루어지는 transaction은 신뢰를 할 수 있지만 외부 작업에 대한 신뢰성은 보장할 수 없다는
-    oracle problem이 있는데 이를 해결해주는게 chain link라고 하는 third-party이다.
-    */
-    function getPrice() public view returns(uint256){
-        //ABI
-        //Address 0x8A753747A1Fa494EC906cE90E9f37563A8AF630e
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
-        //(uint80 roundId, int price, uint startedAt, uint timeStamp, uint80 answeredInRound)= priceFeed.latestRoundData();
-        (, int256 price,,,) = priceFeed.latestRoundData();
-        return uint256(price * 1e10);
-    }
-
-    function getConversionRate(uint256 ethAmount) public view returns (uint256){
-        uint256 ethPrice = getPrice();
-        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18;
-        return ethAmountInUsd;
-    }
-
-    //function withdraw(){}
+    
 }
