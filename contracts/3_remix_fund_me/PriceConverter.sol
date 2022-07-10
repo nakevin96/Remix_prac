@@ -21,7 +21,7 @@ library PriceConverter{
         AggregatorV3Interface priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
         //(uint80 roundId, int price, uint startedAt, uint timeStamp, uint80 answeredInRound)= priceFeed.latestRoundData();
         (, int256 price,,,) = priceFeed.latestRoundData();
-        return uint256(price * 1e10);
+        return uint256(price * 10000000000);
     }
 
     function getConversionRate(uint256 ethAmount) internal view returns (uint256){
@@ -30,5 +30,4 @@ library PriceConverter{
         return ethAmountInUsd;
     }
 
-    //function withdraw(){}
 }

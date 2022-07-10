@@ -11,7 +11,7 @@ import './PriceConverter.sol';
 
 contract FundMe {
     using PriceConverter for uint256;
-    uint256 public minimumUsd = 50 * 1e18;
+    uint256 public minimumUsd = 50 * 10 ** 18;
 
     // fund를 제공해준 사용자를 저장할 변수를 선언
     address[] public funders;
@@ -31,7 +31,7 @@ contract FundMe {
     */
     function fund() public payable{
         /*
-        이 부분에 funding을 받을 코드를 작성할 것이다.
+        이 부분에 이 contract에 funding을 받을 코드를 작성할 것이다.
         이 때 우리는 어떻게 ETH을 이 contract에서 받을 것인지 생각해봐야 한다.
         Transaction이 발생할 때 transaction은 다음과 같은 field를 갖는다.
         - Nonce: 계정의 transaction count
