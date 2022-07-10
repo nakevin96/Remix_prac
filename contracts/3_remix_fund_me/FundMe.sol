@@ -50,7 +50,24 @@ contract FundMe {
             address funder = funders[funderIndex];
             addressToAmountFunded[funder] = 0;
         }
-        
+        //reset the array
+        funders = new address[](0);
+
+        /* solidity-by-example.org/sending-ether/참조
+        // transfer
+        // msg.sender = address, payable(msg.sender) = payable address
+        // 이더리움 전송 실패시 에러 발생 후 transaction revert
+        payable(msg.sender).transfer(address(this).balance);
+
+        //send
+        // 거래가 실패하건 성공하건 boolean값만 반환하기 때문에 따로 revert처리 필요(require사용)
+        bool sendSuccess = payable(msg.sender).send(address(this).balance);
+        require(sendSuccess, "Send failed");
+
+        //call
+        (bool callSuccess, )=payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call failed");
+        */
     }
     
 }
