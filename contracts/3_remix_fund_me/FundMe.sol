@@ -103,4 +103,11 @@ contract FundMe {
     contract는 최대 1개의 receive function을 receive() external payable {...}과 같은 형태로
     선언할 수 있다. 
     */
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
+    }
 }
